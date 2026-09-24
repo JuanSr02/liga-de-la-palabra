@@ -161,6 +161,11 @@ body {
   background: #f7f8fc;
 }
 
+.login-shell.dark { background: #17151e; color: #f5f2fb; }
+.login-shell.dark section { background-color: #211e2a; border-color: #342f40; }
+.login-shell.dark input, .login-shell.dark select { background-color: #211e2a; color: #f5f2fb; border-color: #40394d; }
+.login-shell.dark input::placeholder { color: #a9a1b8; }
+
 .league-shell.dark {
   background: #17151e;
   color: #f5f2fb;
