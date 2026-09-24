@@ -11,9 +11,24 @@ export const metadata: Metadata = {
       {
         url: '/liga-favicon.png',
         type: 'image/png',
+        sizes: '512x512',
       },
     ],
-    apple: '/apple-icon.png',
+    shortcut: '/liga-favicon.png',
+    apple: '/liga-favicon.png',
+  },
+  openGraph: {
+    title: 'Liga de La Palabra',
+    description: 'La competencia familiar de cada día.',
+    type: 'website',
+    locale: 'es_AR',
+    images: [{ url: '/liga-favicon.png', width: 512, height: 512, alt: 'Liga de La Palabra' }],
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Liga de La Palabra',
+    description: 'La competencia familiar de cada día.',
+    images: ['/liga-favicon.png'],
   },
 }
 
