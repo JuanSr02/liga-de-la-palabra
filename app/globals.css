@@ -193,6 +193,11 @@ body {
 select { color: #24252d; }
 select option { background: #ffffff; color: #24252d; }
 .league-shell.dark select option { background: #211e2a; color: #f5f2fb; }
+.league-shell.dark .dark-callout { background: #2a2439; color: #f5f2fb; }
+.league-shell.dark .dark-callout p:last-child { color: #d0c8df; }
+.league-shell.dark .login-secret { background: #211e2a; border-color: #40394d; color: #f5f2fb; }
+.league-shell.dark .login-secret::placeholder { color: #a9a1b8; }
+.league-shell.dark select { color-scheme: dark; }
 
 @layer base {
   * {
