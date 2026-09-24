@@ -15,6 +15,11 @@ export async function POST(request: Request) {
   const result = String(body.result ?? '')
   const points = Number(body.points)
   if (!playerId || !/^([1-6]|X)\/6$/.test(result) || !Number.isInteger(points) || points < 0) return NextResponse.json({ error: 'Resultado inválido.' }, { status: 400 })
-  const { rows } = await pool.query('INSERT INTO league_results (player_id, result, points) VALUES ($1, $2, $3) RETURNING id', [playerId, result, points])
-  return NextResponse.json(rows[0], { status: 201 })
+  try {
+    const { rows } = await pool.query('INSERT INTO league_results (player_id, result, points) VALUES ($1, $2, $3) RETURNING id', [playerId, result, points])
+    return NextResponse.json(rows[0], { status: 201 })
+  } catch (error) {
+    if (error instanceof Error && 'code' in error && error.code === '23505') return NextResponse.json({ error: 'Este jugador ya cargó un resultado hoy.' }, { status: 409 })
+    return NextResponse.json({ error: 'No se pudo guardar el resultado.' }, { status: 500 })
+  }
 }
