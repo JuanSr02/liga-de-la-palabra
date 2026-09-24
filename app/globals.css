@@ -161,6 +161,36 @@ body {
   background: #f7f8fc;
 }
 
+.league-shell.dark {
+  background: #17151e;
+  color: #f5f2fb;
+}
+
+.league-shell.dark header,
+.league-shell.dark aside,
+.league-shell.dark section.rounded-2xl,
+.league-shell.dark .bg-white {
+  background-color: #211e2a;
+  border-color: #342f40;
+}
+
+.league-shell.dark [class*="bg-[#f7f8fc]"] { background-color: #17151e; }
+.league-shell.dark [class*="text-[#24252d]"],
+.league-shell.dark [class*="text-[#858792]"],
+.league-shell.dark [class*="text-[#999ba5]"],
+.league-shell.dark [class*="text-[#a1a3ad]"],
+.league-shell.dark [class*="text-[#777985]"],
+.league-shell.dark [class*="text-[#92949f]"],
+.league-shell.dark [class*="text-[#898b96]"] { color: #aaa4b8; }
+.league-shell.dark [class*="border-[#e8e9ef]"],
+.league-shell.dark [class*="border-[#e9eaf0]"],
+.league-shell.dark [class*="border-[#f0f0f3]"],
+.league-shell.dark [class*="border-[#f3f3f5]"],
+.league-shell.dark [class*="border-[#e7e7ed]"] { border-color: #342f40; }
+.league-shell.dark [class*="bg-[#f8f7fc]"],
+.league-shell.dark [class*="bg-[#f7f6fb]"] { background-color: #2a2635; }
+.league-shell.dark select { background-color: #211e2a; color: #f5f2fb; border-color: #40394d; }
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

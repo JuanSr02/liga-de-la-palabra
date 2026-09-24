@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { CalendarDays, ChevronDown, Clock3, Download, FileText, History, LayoutDashboard, Menu, Plus, Settings2, Trophy, Users, X } from 'lucide-react'
+import { CalendarDays, ChevronDown, Clock3, Download, FileText, History, LayoutDashboard, Menu, Moon, Plus, Settings2, Sun, Trophy, Users, X } from 'lucide-react'
 
 type Player = { name: string; initials: string; tone: string; today: string; points: number; games: number; wins: number; podiums: number; avg: string }
 
@@ -25,10 +25,11 @@ export function LeagueDashboard() {
   const [showModal, setShowModal] = useState(false)
   const [selectedResult, setSelectedResult] = useState('3/6')
   const [sort, setSort] = useState('Puntos totales')
+  const [darkMode, setDarkMode] = useState(false)
   const sortedPlayers = useMemo(() => [...players].sort((a, b) => sort === 'Promedio' ? Number(a.avg) - Number(b.avg) : sort === 'Victorias' ? b.wins - a.wins : a.points - b.points), [sort])
 
   return (
-    <main className="min-h-screen bg-[#f7f8fc] text-[#24252d]">
+    <main className={`league-shell min-h-screen bg-[#f7f8fc] text-[#24252d] ${darkMode ? 'dark' : ''}`}>
       <div className="flex min-h-screen">
         <aside className="hidden w-[238px] shrink-0 border-r border-[#e8e9ef] bg-white px-5 py-7 lg:flex lg:flex-col">
           <div className="mb-10 flex items-center gap-3 px-2">
@@ -47,7 +48,7 @@ export function LeagueDashboard() {
           <header className="flex items-center justify-between border-b border-[#e9eaf0] bg-white px-5 py-4 sm:px-8 lg:px-10">
             <div className="flex items-center gap-3 lg:hidden"><Menu className="size-5 text-[#777a86]" /><span className="font-bold">Liga de <span className="text-[#7954d8]">La Palabra</span></span></div>
             <div className="hidden text-xs text-[#9a9ca7] sm:block">Jueves, 24 de septiembre de 2026</div>
-            <div className="ml-auto flex items-center gap-3"><button className="hidden rounded-lg border border-[#e5e5eb] px-3 py-2 text-xs font-semibold text-[#6d707d] sm:flex sm:items-center sm:gap-2"><Download className="size-3.5" /> Exportar</button><div className="grid size-8 place-items-center rounded-full bg-[#efe8ff] text-xs font-bold text-[#704bc4]">JF</div></div>
+            <div className="ml-auto flex items-center gap-3"><button className="hidden rounded-lg border border-[#e5e5eb] px-3 py-2 text-xs font-semibold text-[#6d707d] sm:flex sm:items-center sm:gap-2"><Download className="size-3.5" /> Exportar</button><button aria-label={darkMode ? 'Activar modo claro' : 'Activar modo oscuro'} onClick={() => setDarkMode(!darkMode)} className="grid size-8 place-items-center rounded-lg border border-[#e5e5eb] text-[#777985] transition hover:bg-[#f5f3fb]">{darkMode ? <Sun className="size-4" /> : <Moon className="size-4" />}</button><div className="grid size-8 place-items-center rounded-full bg-[#efe8ff] text-xs font-bold text-[#704bc4]">JF</div></div>
           </header>
           <div className="mx-auto max-w-[1250px] px-5 py-8 sm:px-8 lg:px-10">
             <div className="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-end"><div><p className="mb-2 text-xs font-semibold text-[#8c8e99]">TEMPORADA ACTIVA <span className="mx-1">•</span> LIGA 2026</p><h1 className="text-[30px] font-bold tracking-[-.04em] text-[#24252d] sm:text-[34px]">Resumen de la liga</h1><p className="mt-2 text-sm text-[#858792]">La competencia familiar de cada día</p></div><button onClick={() => setShowModal(true)} className="flex w-fit items-center gap-2 rounded-xl bg-[#7954d8] px-4 py-3 text-sm font-bold text-white shadow-[0_7px_18px_rgba(121,84,216,.24)] transition hover:bg-[#6845c4]"><Plus className="size-4" /> Registrar resultado</button></div>
