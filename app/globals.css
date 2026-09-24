@@ -190,6 +190,9 @@ body {
 .league-shell.dark [class*="bg-[#f8f7fc]"],
 .league-shell.dark [class*="bg-[#f7f6fb]"] { background-color: #2a2635; }
 .league-shell.dark select { background-color: #211e2a; color: #f5f2fb; border-color: #40394d; }
+select { color: #24252d; }
+select option { background: #ffffff; color: #24252d; }
+.league-shell.dark select option { background: #211e2a; color: #f5f2fb; }
 
 @layer base {
   * {
