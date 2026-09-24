@@ -1,0 +1,73 @@
+'use client'
+
+import { useMemo, useState } from 'react'
+import { CalendarDays, ChevronDown, Clock3, Download, FileText, History, LayoutDashboard, Menu, Plus, Settings2, Trophy, Users, X } from 'lucide-react'
+
+type Player = { name: string; initials: string; tone: string; today: string; points: number; games: number; wins: number; podiums: number; avg: string }
+
+const players: Player[] = [
+  { name: 'María', initials: 'M', tone: 'bg-[#e8e0ff] text-[#6c45c5]', today: '2/6', points: 82, games: 24, wins: 7, podiums: 15, avg: '3.42' },
+  { name: 'Juan', initials: 'J', tone: 'bg-[#d9eee9] text-[#277c70]', today: '3/6', points: 87, games: 24, wins: 5, podiums: 13, avg: '3.63' },
+  { name: 'Pedro', initials: 'P', tone: 'bg-[#f8e1c7] text-[#b06b2d]', today: '4/6', points: 94, games: 23, wins: 3, podiums: 10, avg: '4.09' },
+  { name: 'Carlos', initials: 'C', tone: 'bg-[#dfe5ec] text-[#536275]', today: 'X/6', points: 112, games: 22, wins: 2, podiums: 7, avg: '5.09' },
+]
+
+const navItems = [
+  { label: 'Resumen', icon: LayoutDashboard },
+  { label: 'Clasificación', icon: Trophy },
+  { label: 'Historial', icon: History },
+  { label: 'Estadísticas', icon: FileText },
+  { label: 'Jugadores', icon: Users },
+]
+
+export function LeagueDashboard() {
+  const [activeNav, setActiveNav] = useState('Resumen')
+  const [showModal, setShowModal] = useState(false)
+  const [selectedResult, setSelectedResult] = useState('3/6')
+  const [sort, setSort] = useState('Puntos totales')
+  const sortedPlayers = useMemo(() => [...players].sort((a, b) => sort === 'Promedio' ? Number(a.avg) - Number(b.avg) : sort === 'Victorias' ? b.wins - a.wins : a.points - b.points), [sort])
+
+  return (
+    <main className="min-h-screen bg-[#f7f8fc] text-[#24252d]">
+      <div className="flex min-h-screen">
+        <aside className="hidden w-[238px] shrink-0 border-r border-[#e8e9ef] bg-white px-5 py-7 lg:flex lg:flex-col">
+          <div className="mb-10 flex items-center gap-3 px-2">
+            <div className="grid size-10 place-items-center rounded-xl bg-[#7954d8] text-xl font-bold text-white shadow-[0_5px_14px_rgba(121,84,216,.25)]">L</div>
+            <div><div className="text-[15px] font-bold tracking-tight">Liga de</div><div className="text-[15px] font-bold tracking-tight text-[#7954d8]">La Palabra</div></div>
+          </div>
+          <p className="mb-3 px-3 text-[10px] font-bold uppercase tracking-[.18em] text-[#a2a5b0]">Menú principal</p>
+          <nav className="flex flex-col gap-1">
+            {navItems.map(({ label, icon: Icon }) => <button key={label} onClick={() => setActiveNav(label)} className={`flex items-center gap-3 rounded-xl px-3 py-3 text-left text-[13px] font-semibold transition ${activeNav === label ? 'bg-[#f0ebff] text-[#6841c2]' : 'text-[#747783] hover:bg-[#f7f7fa]'}`}><Icon className="size-[18px]" />{label}</button>)}
+          </nav>
+          <div className="mt-auto rounded-2xl bg-[#f8f6ff] p-4"><div className="mb-2 grid size-8 place-items-center rounded-lg bg-white text-[#7954d8] shadow-sm"><Trophy className="size-4" /></div><p className="text-xs font-bold">¡Vamos, familia!</p><p className="mt-1 text-[11px] leading-4 text-[#85838f]">La constancia es la clave para subir en la tabla.</p></div>
+          <button className="mt-5 flex items-center gap-3 px-3 text-xs font-semibold text-[#8b8d98]"><Settings2 className="size-4" /> Configuración</button>
+        </aside>
+
+        <section className="min-w-0 flex-1">
+          <header className="flex items-center justify-between border-b border-[#e9eaf0] bg-white px-5 py-4 sm:px-8 lg:px-10">
+            <div className="flex items-center gap-3 lg:hidden"><Menu className="size-5 text-[#777a86]" /><span className="font-bold">Liga de <span className="text-[#7954d8]">La Palabra</span></span></div>
+            <div className="hidden text-xs text-[#9a9ca7] sm:block">Jueves, 24 de septiembre de 2026</div>
+            <div className="ml-auto flex items-center gap-3"><button className="hidden rounded-lg border border-[#e5e5eb] px-3 py-2 text-xs font-semibold text-[#6d707d] sm:flex sm:items-center sm:gap-2"><Download className="size-3.5" /> Exportar</button><div className="grid size-8 place-items-center rounded-full bg-[#efe8ff] text-xs font-bold text-[#704bc4]">JF</div></div>
+          </header>
+          <div className="mx-auto max-w-[1250px] px-5 py-8 sm:px-8 lg:px-10">
+            <div className="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-end"><div><p className="mb-2 text-xs font-semibold text-[#8c8e99]">TEMPORADA ACTIVA <span className="mx-1">•</span> LIGA 2026</p><h1 className="text-[30px] font-bold tracking-[-.04em] text-[#24252d] sm:text-[34px]">Resumen de la liga</h1><p className="mt-2 text-sm text-[#858792]">La competencia familiar de cada día</p></div><button onClick={() => setShowModal(true)} className="flex w-fit items-center gap-2 rounded-xl bg-[#7954d8] px-4 py-3 text-sm font-bold text-white shadow-[0_7px_18px_rgba(121,84,216,.24)] transition hover:bg-[#6845c4]"><Plus className="size-4" /> Registrar resultado</button></div>
+            <div className="mb-6 grid gap-4 sm:grid-cols-3"><StatCard label="Puntos acumulados" value="375" detail="Entre todos los jugadores" tone="purple" /><StatCard label="Partidas jugadas" value="93" detail="De 24 días registrados" tone="green" /><StatCard label="Promedio familiar" value="4.03" detail="Puntos por partida" tone="yellow" /></div>
+            <div className="grid gap-5 xl:grid-cols-[1.08fr_.92fr]">
+              <section className="rounded-2xl border border-[#e8e9ef] bg-white p-5 shadow-[0_3px_12px_rgba(30,30,60,.025)] sm:p-6"><div className="mb-5 flex items-start justify-between"><div><div className="flex items-center gap-2"><h2 className="text-lg font-bold">Hoy</h2><span className="rounded-md bg-[#f2efff] px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-[#7652c8]">24 sep</span></div><p className="mt-1 text-xs text-[#999ba5]">Partida #24 <span className="mx-1">•</span> La Palabra del Día</p></div><CalendarDays className="size-5 text-[#b2b3bc]" /></div><div className="flex flex-col">{players.map((player, index) => <div key={player.name} className="flex items-center gap-3 border-t border-[#f0f0f3] py-3"><div className="w-5 text-center text-xs font-bold text-[#9a9ca6]">{index < 3 ? ['🥇','🥈','🥉'][index] : '—'}</div><div className={`grid size-9 place-items-center rounded-full text-xs font-bold ${player.tone}`}>{player.initials}</div><div className="flex-1"><div className="text-sm font-bold">{player.name}</div><div className="text-[11px] text-[#a0a1aa]">Registrado hace {index + 1} h</div></div><div className="text-right"><div className="text-sm font-bold">{player.today}</div><div className="text-[11px] font-semibold text-[#7954d8]">{player.today === 'X/6' ? 7 : player.today[0]} puntos</div></div></div>)}</div><div className="mt-4 flex items-center gap-2 rounded-xl bg-[#f8f7fc] px-3 py-2.5 text-xs text-[#777985]"><Trophy className="size-4 text-[#e2a73b]" /> <span><strong className="text-[#4d4e57]">María</strong> va ganando hoy</span></div></section>
+              <section className="rounded-2xl border border-[#e8e9ef] bg-white p-5 shadow-[0_3px_12px_rgba(30,30,60,.025)] sm:p-6"><div className="mb-5 flex flex-wrap items-center justify-between gap-3"><div><h2 className="text-lg font-bold">Clasificación general</h2><p className="mt-1 text-xs text-[#999ba5]">Menos puntos es mejor</p></div><select value={sort} onChange={(event) => setSort(event.target.value)} className="rounded-lg border border-[#e7e7ed] bg-white px-3 py-2 text-xs font-semibold text-[#777985] outline-none"><option>Puntos totales</option><option>Promedio</option><option>Victorias</option></select></div><div className="overflow-x-auto"><table className="w-full min-w-[420px] text-left"><thead><tr className="border-b border-[#f0f0f3] text-[10px] font-bold uppercase tracking-wide text-[#a1a3ad]"><th className="pb-3">#</th><th className="pb-3">Jugador</th><th className="pb-3 text-right">Puntos</th><th className="pb-3 text-right">Partidas</th><th className="pb-3 text-right">Promedio</th></tr></thead><tbody>{sortedPlayers.map((player, index) => <tr key={player.name} className="border-b border-[#f3f3f5] last:border-0"><td className="py-3 text-xs font-bold text-[#9b9da7]">{index + 1}</td><td className="py-3"><div className="flex items-center gap-2"><span className={`grid size-7 place-items-center rounded-full text-[10px] font-bold ${player.tone}`}>{player.initials}</span><span className="text-xs font-bold">{player.name}</span></div></td><td className="py-3 text-right text-sm font-bold">{player.points}</td><td className="py-3 text-right text-xs text-[#777985]">{player.games}</td><td className="py-3 text-right text-xs font-semibold text-[#777985]">{player.avg}</td></tr>)}</tbody></table></div><button className="mt-4 flex items-center gap-1 text-xs font-bold text-[#7954d8]">Ver clasificación completa <ChevronDown className="size-3 -rotate-90" /></button></section>
+            </div>
+            <div className="mt-5 grid gap-5 xl:grid-cols-[.9fr_1.1fr]"><section className="rounded-2xl border border-[#e8e9ef] bg-white p-5 sm:p-6"><div className="mb-5 flex items-center justify-between"><div><h2 className="text-lg font-bold">Actividad reciente</h2><p className="mt-1 text-xs text-[#999ba5]">Últimas partidas registradas</p></div><History className="size-5 text-[#b2b3bc]" /></div><div className="flex flex-col gap-4">{['23 sep','22 sep','21 sep'].map((date, i) => <div className="flex items-center gap-3" key={date}><div className="grid size-8 place-items-center rounded-lg bg-[#f7f6fb] text-[10px] font-bold text-[#8a8c98]">{24-i}</div><div className="flex-1"><p className="text-xs font-bold">{date} <span className="font-normal text-[#9b9da7]">• Día {24-i}</span></p><p className="mt-1 text-[11px] text-[#898b96]">Ganó <strong className="text-[#555762]">{i === 1 ? 'Juan' : 'María'}</strong> con {i + 2}/6</p></div><span className="rounded-md bg-[#eff8f4] px-2 py-1 text-[10px] font-bold text-[#388a6d]">Completado</span></div>)}</div></section><section className="rounded-2xl border border-[#e8e9ef] bg-white p-5 sm:p-6"><div className="mb-5 flex items-center justify-between"><div><h2 className="text-lg font-bold">Tu progreso</h2><p className="mt-1 text-xs text-[#999ba5]">Promedio de puntos por partida</p></div><span className="text-xs font-bold text-[#39a37f]">-0.42 este mes</span></div><div className="flex h-[130px] items-end gap-3 px-2">{[48,60,45,76,67,82,72,91,80,88,95,87].map((height, i) => <div key={i} className="flex flex-1 flex-col items-center gap-2"><div className={`w-full rounded-t-md ${i === 11 ? 'bg-[#7954d8]' : 'bg-[#e5dcfa]'}`} style={{ height: `${height}%` }} /><span className="text-[9px] text-[#a4a5ae]">{i + 1}</span></div>)}</div></section></div>
+          </div>
+        </section>
+      </div>
+      {showModal && <ResultModal result={selectedResult} setResult={setSelectedResult} onClose={() => setShowModal(false)} />}
+    </main>
+  )
+}
+
+function StatCard({ label, value, detail, tone }: { label: string; value: string; detail: string; tone: 'purple' | 'green' | 'yellow' }) { const styles = { purple: 'bg-[#f5f1ff] text-[#7954d8]', green: 'bg-[#eef8f4] text-[#3b9c7a]', yellow: 'bg-[#fff7e9] text-[#cf9635]' }; return <div className="rounded-2xl border border-[#e8e9ef] bg-white p-5"><div className={`mb-4 grid size-9 place-items-center rounded-xl text-sm ${styles[tone]}`}><span className="font-bold">{tone === 'purple' ? 'Σ' : tone === 'green' ? '↗' : '•'}</span></div><p className="text-xs font-semibold text-[#92949f]">{label}</p><div className="mt-1 flex items-end gap-2"><span className="text-2xl font-bold tracking-tight">{value}</span><span className="mb-1 text-[11px] text-[#a1a3ad]">{detail}</span></div></div> }
+
+function ResultModal({ result, setResult, onClose }: { result: string; setResult: (result: string) => void; onClose: () => void }) { const options = ['1/6','2/6','3/6','4/6','5/6','6/6','X/6']; return <div className="fixed inset-0 z-50 grid place-items-center bg-[#272433]/35 p-4 backdrop-blur-sm"><div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl"><div className="mb-6 flex items-start justify-between"><div><h2 className="text-xl font-bold">Registrar resultado</h2><p className="mt-1 text-xs text-[#92949f]">Añade la partida de hoy en segundos.</p></div><button onClick={onClose} className="rounded-lg p-1 text-[#a2a3ac] hover:bg-[#f5f5f7]"><X className="size-5" /></button></div><label className="mb-2 block text-xs font-bold text-[#555762]">Jugador</label><select className="mb-5 w-full rounded-xl border border-[#e4e4eb] bg-white px-3 py-3 text-sm font-semibold outline-none"><option>Juan</option><option>María</option><option>Pedro</option><option>Carlos</option></select><label className="mb-2 block text-xs font-bold text-[#555762]">Resultado</label><div className="grid grid-cols-4 gap-2">{options.map(option => <button key={option} onClick={() => setResult(option)} className={`rounded-xl border py-3 text-sm font-bold transition ${result === option ? 'border-[#7954d8] bg-[#f0ebff] text-[#7048c9]' : 'border-[#e7e7ed] text-[#6f717c] hover:border-[#cbbcf3]'}`}>{option}</button>)}</div><div className="mt-4 flex items-center gap-2 rounded-xl bg-[#f8f7fc] px-4 py-3 text-sm"><Clock3 className="size-4 text-[#7954d8]" /><span>{result} <span className="text-[#a1a2ac]">→</span> <strong>{result === 'X/6' ? 7 : result[0]} puntos</strong></span></div><button onClick={onClose} className="mt-6 w-full rounded-xl bg-[#7954d8] py-3 text-sm font-bold text-white shadow-[0_6px_14px_rgba(121,84,216,.22)] hover:bg-[#6845c4]">Guardar resultado</button></div></div> }
+
+export default LeagueDashboard
+ 

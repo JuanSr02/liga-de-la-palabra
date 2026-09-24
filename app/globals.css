@@ -153,6 +153,14 @@
   }
 }
 
+html {
+  color-scheme: light;
+}
+
+body {
+  background: #f7f8fc;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
