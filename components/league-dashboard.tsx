@@ -5,7 +5,7 @@ import { useEffect, useState, type ReactNode } from 'react'
 import { CalendarDays, Download, FileText, FileUp, History, LayoutDashboard, LoaderCircle, Menu, Moon, Plus, Settings2, Sun, Trophy, Users, X } from 'lucide-react'
 
 type Player = { id: string; name: string; games: number; points: number; avg: string; initials?: string }
-type LeagueData = { players: Player[]; results: { id: string; name: string; result: string; points: number; played_on: string; created_at: string; created_at_argentina: string }[] }
+type LeagueData = { players: Player[]; results: { id: string; name: string; result: string; points: number; played_on: string }[] }
 const fetcher = (url: string) => fetch(url).then((response) => response.json())
 type Period = 'day' | 'week' | 'month' | '3months' | '6months' | 'year' | 'all'
 const periodLabels: Record<Period, string> = { day: 'Día', week: 'Semana', month: 'Mes', '3months': 'Últimos 3 meses', '6months': 'Últimos 6 meses', year: 'Año', all: 'Todo' }
@@ -15,7 +15,6 @@ const navItems = [{ label: 'Resumen', icon: LayoutDashboard }, { label: 'Clasifi
 const colors = ['bg-[#e8e0ff] text-[#6c45c5]', 'bg-[#d9eee9] text-[#277c70]', 'bg-[#f8e1c7] text-[#b06b2d]', 'bg-[#dfe5ec] text-[#536275]']
 const initialsFor = (name: string) => name.split(/\s+/).filter(Boolean).map((part) => part[0]).join('').slice(0, 2).toUpperCase()
 function longestStreak(results: LeagueData['results']) { const byPlayer = new Map<string, string[]>(); results.forEach((result) => byPlayer.set(result.name, [...(byPlayer.get(result.name) ?? []), result.played_on.slice(0, 10)])); let winner = '—'; let best = 0; byPlayer.forEach((values, name) => { const days = [...new Set(values)].sort(); let current = 0; let previous = ''; for (const day of days) { const next = previous ? new Date(`${previous}T12:00:00-03:00`) : null; current = next && new Date(`${day}T12:00:00-03:00`).getTime() - next.getTime() === 86400000 ? current + 1 : 1; if (current > best) { best = current; winner = name } previous = day } }); return best ? `${winner} · ${best} días` : '—' }
-function argentinaTime(value: string | undefined) { return value ? value.slice(11, 16) : '' }
 function argentinaDateLabel(value: string) { const [year, month, day] = value.slice(0, 10).split('-').map(Number); const months = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sept', 'oct', 'nov', 'dic']; return `${day} de ${months[month - 1]} de ${year}` }
 
 export default function LeagueDashboard() {
