@@ -159,6 +159,21 @@ html {
 
 body {
   background: #f7f8fc;
+  overflow-x: hidden;
+}
+
+@media (max-width: 1023px) {
+  .league-shell main, .league-shell section, .league-shell header, .league-shell article { max-width: 100%; min-width: 0; }
+  .league-shell h1, .league-shell h2, .league-shell h3, .league-shell p, .league-shell td, .league-shell th, .league-shell button, .league-shell label { overflow-wrap: anywhere; }
+  .league-shell table { min-width: 520px; }
+  .league-shell .overflow-x-auto { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .league-shell input, .league-shell select, .league-shell textarea { max-width: 100%; min-width: 0; }
+}
+
+@media (max-width: 639px) {
+  .league-shell .text-3xl { font-size: 1.65rem; line-height: 1.15; }
+  .league-shell .p-6 { padding: 1rem; }
+  .league-shell .grid-cols-6 { gap: 0.125rem; }
 }
 
 .login-shell.dark { background: #17151e; color: #f5f2fb; }
