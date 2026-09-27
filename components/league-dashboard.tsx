@@ -6,7 +6,7 @@ import { CalendarDays, Download, FileText, FileUp, History, LayoutDashboard, Loa
 
 type Player = { id: string; name: string; games: number; points: number; avg: string; initials?: string }
 type LeagueData = { players: Player[]; results: { id: string; name: string; result: string; points: number; played_on: string; created_at?: string | null }[] }
-const fetcher = (url: string) => fetch(url).then((response) => response.json())
+const fetcher = (url: string) => fetch(url, { cache: 'no-store' }).then((response) => response.json())
 type Period = 'day' | 'week' | 'month' | '3months' | '6months' | 'year' | 'all'
 const periodLabels: Record<Period, string> = { day: 'Día', week: 'Semana', month: 'Mes', '3months': 'Últimos 3 meses', '6months': 'Últimos 6 meses', year: 'Año', all: 'Todo' }
 function argentinaDateKey(date = new Date()) { return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Argentina/Buenos_Aires', year: 'numeric', month: '2-digit', day: '2-digit' }).format(date) }
