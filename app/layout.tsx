@@ -4,7 +4,7 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'Liga de La Palabra',
-  description: 'La competencia familiar de cada día.',
+  description: 'La competencia familiar de cada día. Resultados y estadísticas de la liga.',
   generator: 'v0.app',
   icons: {
     icon: [
