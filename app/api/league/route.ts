@@ -22,7 +22,7 @@ export async function PATCH(request: Request) {
   const result = String(body.result ?? '')
   const points = Number(body.points)
   if (!id || !/^([1-6]|X)\/6$/.test(result) || !Number.isInteger(points)) return NextResponse.json({ error: 'Resultado inválido.' }, { status: 400 })
-  const { rows } = await pool.query("UPDATE league_results SET result = $1, points = $2 WHERE id = $3 AND player_id = $4 RETURNING id", [result, points, id, playerId, isAdmin])
+  const { rows } = await pool.query("UPDATE league_results SET result = $1, points = $2 WHERE id = $3 AND (player_id = $4 OR $5) RETURNING id", [result, points, id, playerId, isAdmin])
   return rows[0] ? NextResponse.json(rows[0]) : NextResponse.json({ error: 'Registro no encontrado.' }, { status: 404 })
 }
 
