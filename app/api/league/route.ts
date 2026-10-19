@@ -33,9 +33,16 @@ export async function POST(request: Request) {
   const isAdmin = adminName === 'juan'
   const result = String(body.result ?? '')
   const points = Number(body.points)
+  const playedOn = String(body.playedOn ?? '')
   if (!playerId || !/^([1-6]|X)\/6$/.test(result) || !Number.isInteger(points) || points < 0) return NextResponse.json({ error: 'Resultado inválido.' }, { status: 400 })
+  if (playedOn && !/^\d{4}-\d{2}-\d{2}$/.test(playedOn)) return NextResponse.json({ error: 'Fecha inválida.' }, { status: 400 })
+  if (!isAdmin && playedOn) return NextResponse.json({ error: 'Solo Juan puede elegir la fecha.' }, { status: 403 })
   try {
-    const { rows } = await pool.query("INSERT INTO league_results (player_id, result, points, played_on) VALUES ($1, $2, $3, (now() AT TIME ZONE 'America/Argentina/Buenos_Aires')::date) RETURNING id", [playerId, result, points])
+    if (!isAdmin) {
+      const { rows: playerRows } = await pool.query('SELECT id FROM league_players WHERE id = $1 AND LOWER(name) = LOWER($2)', [playerId, adminName])
+      if (!playerRows[0]) return NextResponse.json({ error: 'Solo puedes cargar tu propio resultado.' }, { status: 403 })
+    }
+    const { rows } = await pool.query("INSERT INTO league_results (player_id, result, points, played_on) VALUES ($1, $2, $3, COALESCE(NULLIF($4, '')::date, (now() AT TIME ZONE 'America/Argentina/Buenos_Aires')::date)) RETURNING id", [playerId, result, points, playedOn])
     return NextResponse.json(rows[0], { status: 201 })
   } catch (error) {
     if (error instanceof Error && 'code' in error && error.code === '23505') return NextResponse.json({ error: 'Este jugador ya cargó un resultado hoy.' }, { status: 409 })
